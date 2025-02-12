@@ -1,5 +1,11 @@
 import unittest
 
+def create_empty_board(self, n):
+    return [['O' for _ in range(n)] for _ in range(n)]
+
+def count_queens(self, board):
+    return sum(row.count('#') for row in board)
+
 def has_conflict(board):
     # Vérification des lignes
     for row in board:
@@ -57,7 +63,13 @@ class TestNQueens(unittest.TestCase):
                 ['O', 'O', 'O']]
         self.assertFalse(has_conflict(board))
 
-
+    def test_init_3x3_board(self):
+        board = self.create_empty_board(3)
+        expected = [['O', 'O', 'O'],
+                   ['O', 'O', 'O'],
+                   ['O', 'O', 'O']]
+        self.assertEqual(board, expected)
+        self.assertTrue(self.count_queens(board) == 0)
 
 if __name__ == '__main__':
     unittest.main()
