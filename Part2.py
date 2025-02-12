@@ -24,6 +24,13 @@ def count_attacks(queens):
                 attacks[j] += 1
     return attacks
 
+def is_valid_configuration(queens, size=4):
+    if len(queens) != size:
+        return False
+    
+    attacks = count_attacks(queens)
+    return all(count == 1 for count in attacks.values())
+
 class TestSingleAttackQueens(unittest.TestCase):
 
     def test_init_board(self):
@@ -73,6 +80,21 @@ class TestSingleAttackQueens(unittest.TestCase):
         attacks = count_attacks(queens)
         for count in attacks.values():
             self.assertEqual(count, 0)
+
+    def test_valid_configuration(self):
+        # Configuration où chaque reine attaque exactement une autre reine
+        queens = [(0, 0), (2, 0), (1, 2), (3, 2)]
+        self.assertTrue(is_valid_configuration(queens))
+
+    def test_invalid_configuration_too_many_attacks(self):
+        # Configuration où certaines reines attaquent plus d'une reine
+        queens = [(0, 0), (0, 2), (0, 3), (1, 0)]
+        self.assertFalse(is_valid_configuration(queens))
+
+    def test_invalid_configuration_no_attacks(self):
+        # Configuration où aucune reine ne s'attaque
+        queens = [(0, 1), (1, 3), (2, 0), (3, 2)]
+        self.assertFalse(is_valid_configuration(queens))
 
 if __name__ == '__main__':
     unittest.main()
