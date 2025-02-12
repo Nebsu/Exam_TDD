@@ -36,13 +36,26 @@ def has_conflict(board):
 def solve_n_queens(n):
     if n <= 0:
         raise ValueError("La taille du plateau doit être positive")
+    
     if n == 1:
         return [[['#']]]
-    if n == 2:
-        return []  # Pas de solution possible
-    if n == 3:
-        return []  # Pas de solution possible
-    return []
+
+    def try_add_queen(board, row):
+        if row == n:
+            return [board]
+        
+        solutions = []
+        for col in range(n):
+            new_board = [row[:] for row in board]
+            new_board[row][col] = '#'
+            
+            if not has_conflict(new_board):
+                solutions.extend(try_add_queen(new_board, row + 1))
+        
+        return solutions
+    empty_board = create_empty_board(n)
+    solutions = try_add_queen(empty_board, 0)
+    return solutions
 
 class TestNQueens(unittest.TestCase):
     def test_same_row(self):
@@ -100,6 +113,19 @@ class TestNQueens(unittest.TestCase):
             solve_n_queens(0)
         with self.assertRaises(ValueError):
             solve_n_queens(-1)
+
+    def test_solve_4x4(self):
+        solutions = solve_n_queens(4)
+        self.assertEqual(len(solutions), 2)
+        expected = [[['O', '#', 'O', 'O'],
+                    ['O', 'O', 'O', '#'],
+                    ['#', 'O', 'O', 'O'],
+                    ['O', 'O', '#', 'O']],
+                    [['O', 'O', '#', 'O'],
+                    ['#', 'O', 'O', 'O'],
+                    ['O', 'O', 'O', '#'],
+                    ['O', '#', 'O', 'O']]]
+        self.assertEqual(solutions, expected)
 
 if __name__ == '__main__':
     unittest.main()
