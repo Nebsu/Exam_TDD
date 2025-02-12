@@ -85,5 +85,9 @@ class TestNQueens(unittest.TestCase):
         solutions = solve_n_queens(10)
         self.assertEqual(len(solutions), 724)
 
+    def test_solve_12x12(self):
+        solutions = solve_n_queens(12)
+        self.assertEqual(len(solutions), 14200)
+
 if __name__ == '__main__':
     unittest.main()

@@ -31,6 +31,23 @@ def is_valid_configuration(queens, size=4):
     attacks = count_attacks(queens)
     return all(count == 1 for count in attacks.values())
 
+def find_configurations(size=4):
+    def backtrack(queens, row):
+        if len(queens) == size:
+            if is_valid_configuration(queens, size):
+                solutions.append(queens[:])
+            return
+            
+        for col in range(size):
+            queens.append((row, col))
+            if len(queens) == 1 or count_attacks(queens)[len(queens)-1] <= 1:
+                backtrack(queens, row + 1)
+            queens.pop()
+    
+    solutions = []
+    backtrack([], 0)
+    return solutions
+
 class TestSingleAttackQueens(unittest.TestCase):
 
     def test_init_board(self):
@@ -95,6 +112,10 @@ class TestSingleAttackQueens(unittest.TestCase):
         # Configuration où aucune reine ne s'attaque
         queens = [(0, 1), (1, 3), (2, 0), (3, 2)]
         self.assertFalse(is_valid_configuration(queens))
+
+    def test_find_configurations_4x4(self):
+        solutions = find_configurations(4)
+        self.assertEqual(len(solutions), 12)
 
 if __name__ == '__main__':
     unittest.main()
