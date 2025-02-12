@@ -71,5 +71,24 @@ class TestNQueens(unittest.TestCase):
         self.assertEqual(board, expected)
         self.assertTrue(self.count_queens(board) == 0)
 
+    def test_solve_1x1(self):
+        solutions = solve_n_queens(1)
+        self.assertEqual(len(solutions), 1)
+        self.assertEqual(solutions[0], [['#']])
+
+    def test_solve_2x2(self):
+        solutions = solve_n_queens(2)
+        self.assertEqual(len(solutions), 0)  # Pas de solution pour 2x2
+
+    def test_solve_3x3(self):
+        solutions = solve_n_queens(3)
+        self.assertEqual(len(solutions), 0)  # Pas de solution pour 3x3
+
+    def test_solve_invalid_input(self):
+        with self.assertRaises(ValueError):
+            solve_n_queens(0)
+        with self.assertRaises(ValueError):
+            solve_n_queens(-1)
+
 if __name__ == '__main__':
     unittest.main()
