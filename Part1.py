@@ -37,21 +37,30 @@ def solve_n_queens(n):
     if n == 1:
         return [[['#']]]
 
-    def try_add_queen(board, row):
+    def is_safe(row, col, queens):
+        # Vérifier les conflits avec les reines déjà placées
+        for r, c in enumerate(queens[:row]):
+            if c == col or abs(row - r) == abs(col - c):
+                return False
+        return True
+
+    def place_queens(row, queens, solutions):
         if row == n:
-            return [board]
+            board = create_empty_board(n)
+            for r, c in enumerate(queens):
+                board[r][c] = '#'
+            solutions.append(board)
+            return
         
-        solutions = []
         for col in range(n):
-            new_board = [row[:] for row in board]
-            new_board[row][col] = '#'
-            
-            if not has_conflict(new_board):
-                solutions.extend(try_add_queen(new_board, row + 1))
-        
-        return solutions
-    empty_board = create_empty_board(n)
-    solutions = try_add_queen(empty_board, 0)
+            if is_safe(row, col, queens):
+                queens[row] = col
+                place_queens(row + 1, queens, solutions)
+
+    solutions = []
+    queens = [-1] * n
+    place_queens(0, queens, solutions)
+    
     return solutions
 
 class TestNQueens(unittest.TestCase):
